@@ -1,0 +1,3 @@
+{{- $t := time.AsTime . -}}
+{{- $day := cond (eq $t.Day 1) "1er" (string $t.Day) -}}
+{{- printf "%s %s" $day ($t | time.Format "January 2006") -}}

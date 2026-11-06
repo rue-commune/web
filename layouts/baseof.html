@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    {{- $title := cond .IsHome .Title (printf "%s — %s" .Title site.Title) }}
+    {{- $description := .Params.description }}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{{ $description }}" />
+    <meta name="theme-color" content="#f5f0e6" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ $title }}" />
+    <meta property="og:description" content="{{ .Params.og_description | default $description }}" />
+    {{- with .Params.og_image }}
+    <meta property="og:image" content="{{ . | absURL }}" />
+    {{- end }}
+    <title>{{ $title }}</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    {{- block "head" . }}{{ end }}
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    {{ partial "header.html" . }}
+
+    <main id="contenu">
+      {{- block "main" . }}{{ end }}
+    </main>
+
+    {{ partial "footer.html" . }}
+  </body>
+</html>

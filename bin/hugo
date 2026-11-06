@@ -1,0 +1,44 @@
+#!/bin/sh
+# Runs the Hugo version this site is pinned to, downloading it on first use
+# into .cache/ (Linux amd64/arm64). Elsewhere, falls back to an installed
+# hugo of the same version. To upgrade: change VERSION and both hashes
+# (from hugo_<version>_checksums.txt on the GitHub release).
+set -eu
+
+VERSION=0.168.0
+SHA256_linux_amd64=fada83ad56bb27ed4cb7dd81590303bdac16140f944ac4e66fc248117e2d5594
+SHA256_linux_arm64=91ce984e998a955a3dc1b5852eb4e65d0ed0f6d12a5c51690df97a548e1fdeeb
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+dir="$root/.cache/hugo-$VERSION"
+bin="$dir/hugo"
+
+if [ ! -x "$bin" ]; then
+    case "$(uname -s)-$(uname -m)" in
+        Linux-x86_64) arch=amd64 sha=$SHA256_linux_amd64 ;;
+        Linux-aarch64 | Linux-arm64) arch=arm64 sha=$SHA256_linux_arm64 ;;
+        *)
+            if command -v hugo >/dev/null 2>&1 &&
+                hugo version | grep -q "hugo v$VERSION-"; then
+                exec hugo "$@"
+            fi
+            echo "bin/hugo: install Hugo $VERSION (https://gohugo.io/installation/)" >&2
+            exit 1
+            ;;
+    esac
+
+    tarball="hugo_${VERSION}_linux-$arch.tar.gz"
+    tmp=$(mktemp -d)
+    trap 'rm -rf "$tmp"' EXIT
+    echo "bin/hugo: downloading Hugo $VERSION ($arch)" >&2
+    curl -fsSL -o "$tmp/$tarball" \
+        "https://github.com/gohugoio/hugo/releases/download/v$VERSION/$tarball"
+    echo "$sha  $tmp/$tarball" | sha256sum -c --quiet -
+    tar -xzf "$tmp/$tarball" -C "$tmp" hugo
+    mkdir -p "$dir"
+    mv "$tmp/hugo" "$bin"
+    rm -rf "$tmp"
+    trap - EXIT
+fi
+
+exec "$bin" "$@"

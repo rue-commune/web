@@ -763,6 +763,138 @@ footer > p,
   outline-offset: 4px;
 }
 
+.meetings {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid var(--line);
+  font-size: 18px;
+}
+
+.meetings th,
+.meetings td {
+  padding: 26px 20px 26px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-weight: 400;
+}
+
+.meetings thead th {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.meetings .text-link {
+  padding: 0 0 3px;
+}
+
+.meetings .text-link:hover,
+.meetings .text-link:focus-visible {
+  color: var(--coral);
+}
+
+.meetings-pending {
+  color: rgba(16, 45, 54, 0.55);
+  font-size: 14px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 30px;
+  padding-top: 0;
+}
+
+.prose {
+  max-width: 1000px;
+}
+
+.prose > * {
+  max-width: 760px;
+}
+
+.prose p,
+.prose li {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.prose h1 {
+  margin: 64px 0 22px;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.prose h2 {
+  margin: 48px 0 16px;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.prose h3,
+.prose h4 {
+  margin: 36px 0 12px;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.prose > h2#page-title {
+  margin-top: 0;
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+.prose a {
+  border-bottom: 1px solid currentColor;
+}
+
+.prose a:hover,
+.prose a:focus-visible {
+  color: var(--coral);
+}
+
+.prose blockquote {
+  margin: 20px 0;
+  padding: 16px 22px;
+  border-left: 3px solid var(--coral);
+  background: var(--paper);
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose hr {
+  margin: 48px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose table {
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.prose th,
+.prose td {
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
 @media (max-width: 960px) {
   .site-header {
     grid-template-columns: 1fr auto;
@@ -966,6 +1098,15 @@ footer > p,
 
   .copyright {
     margin-top: 10px;
+  }
+
+  .meetings {
+    font-size: 16px;
+  }
+
+  .meetings th,
+  .meetings td {
+    padding-right: 12px;
   }
 }
 

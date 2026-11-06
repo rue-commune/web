@@ -1,0 +1,15 @@
+{{ define "main" }}
+      <section class="section" aria-labelledby="page-title">
+        <div class="section-label">
+          <span>—</span>
+          <p>{{ .Params.label }}</p>
+        </div>
+        <div class="mission-content{{ if .Params.prose }} prose{{ end }}">
+          {{- if eq .Section "gouvernance" }}
+          <a class="text-link back-link" href="/gouvernance/"><span aria-hidden="true">←</span> Gouvernance</a>
+          {{- end }}
+          <h2 id="page-title">{{ .Title }}</h2>
+          {{ .Content }}
+        </div>
+      </section>
+{{ end }}

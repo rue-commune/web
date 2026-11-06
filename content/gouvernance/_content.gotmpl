@@ -1,0 +1,55 @@
+{{- /*
+  Publishes documents from the gouvernance/ submodule (rue-commune/gouvernance
+  on GitHub). Only the files named here are published: the statuts, the RI,
+  and CA/AAAAMMJJ-odj.md / CA/AAAAMMJJ-pv.md for each CA meeting. Each file's
+  leading "# ..." heading is dropped in favour of the title set here.
+*/ -}}
+{{- $src := "gouvernance" }}
+{{- $dropTitle := `^\s*# [^\n]*\n` }}
+
+{{- $textes := slice
+  (dict "file" "statuts.md" "path" "statuts" "title" "Statuts" "weight" 1
+        "headline" "Statuts de l’association, adoptés par l’assemblée générale constitutive du 17 août 2026")
+  (dict "file" "reglement-interieur.md" "path" "reglement-interieur" "title" "Règlement intérieur" "weight" 2
+        "headline" "Règlement intérieur, adopté par l’assemblée générale constitutive du 17 août 2026")
+}}
+{{- range $textes }}
+  {{- $body := replaceRE $dropTitle "" (os.ReadFile (path.Join $src .file)) 1 }}
+  {{- $.AddPage (dict
+    "path" .path
+    "title" .title
+    "weight" .weight
+    "content" (dict "mediaType" "text/markdown" "value" $body)
+    "params" (dict
+      "doc" "texte"
+      "headline" .headline
+      "label" "Gouvernance"
+      "prose" true
+      "description" (printf "%s de l’association Rue Commune." .title))
+  ) }}
+{{- end }}
+
+{{- $names := dict "odj" "Ordre du jour" "pv" "Procès-verbal" }}
+{{- range os.ReadDir (path.Join $src "CA") }}
+  {{- with findRESubmatch `^(\d{4})(\d{2})(\d{2})-(odj|pv)\.md$` .Name }}
+    {{- $m := index . 0 }}
+    {{- $date := printf "%s-%s-%s" (index $m 1) (index $m 2) (index $m 3) }}
+    {{- $doc := index $m 4 }}
+    {{- $t := time.AsTime $date }}
+    {{- $day := cond (eq $t.Day 1) "1er" (string $t.Day) }}
+    {{- $title := printf "%s du CA du %s %s" (index $names $doc) $day ($t | time.Format "January 2006") }}
+    {{- $body := replaceRE $dropTitle "" (os.ReadFile (path.Join $src "CA" (index $m 0))) 1 }}
+    {{- $.AddPage (dict
+      "path" (printf "ca/%s-%s" $date $doc)
+      "title" $title
+      "date" $t
+      "content" (dict "mediaType" "text/markdown" "value" $body)
+      "params" (dict
+        "doc" $doc
+        "reunion" $date
+        "label" "Réunions du CA"
+        "prose" true
+        "description" (printf "%s de Rue Commune." $title))
+    ) }}
+  {{- end }}
+{{- end }}

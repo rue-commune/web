@@ -1,0 +1,16 @@
+baseURL = "https://rue-commune.org/"
+locale = "fr-FR"
+defaultContentLanguage = "fr"
+title = "Rue Commune"
+disableKinds = ["taxonomy", "term", "rss"]
+disableHugoGeneratorInject = true
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.goldmark.extensions]
+  linkify = false
+
+# Pinned in bin/hugo; this makes an older system hugo warn.
+[module.hugoVersion]
+  min = "0.168.0"

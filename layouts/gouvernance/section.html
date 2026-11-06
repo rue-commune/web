@@ -1,0 +1,70 @@
+{{ define "main" }}
+      <section class="section" id="textes" aria-labelledby="textes-title">
+        <div class="section-label">
+          <span>01</span>
+          <p>Textes fondateurs</p>
+        </div>
+        <div class="press-content">
+          <h2 id="textes-title">Nos règles, en toute transparence.</h2>
+          <ul class="press-list">
+            {{- range (where .Pages "Params.doc" "texte").ByWeight }}
+            <li>
+              <a href="{{ .RelPermalink }}">
+                <span class="press-source">{{ .Title }}</span>
+                <span class="press-headline">{{ .Params.headline }}</span>
+                <span class="press-icon" aria-hidden="true">→</span>
+              </a>
+            </li>
+            {{- end }}
+            <li>
+              <a href="https://github.com/rue-commune/gouvernance" target="_blank" rel="noopener">
+                <span class="press-source">Historique</span>
+                <span class="press-headline">Sources et historique des modifications de nos textes sur GitHub</span>
+                <span class="press-icon" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="conseil" aria-labelledby="conseil-title">
+        <div class="section-label">
+          <span>02</span>
+          <p>Réunions du CA</p>
+        </div>
+        <div class="press-content">
+          <h2 id="conseil-title">Ordres du jour et procès-verbaux.</h2>
+          <table class="meetings">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Ordre du jour</th>
+                <th scope="col">Procès-verbal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{- range (where .Pages "Params.reunion" "!=" nil).GroupByParam "reunion" "desc" }}
+              {{- $date := partial "date-fr.html" .Key }}
+              {{- $docs := .Pages }}
+              <tr>
+                <th scope="row">{{ $date }}</th>
+                {{- range slice (dict "doc" "odj" "label" "Ordre du jour" "missing" "—") (dict "doc" "pv" "label" "Procès-verbal" "missing" "à venir") }}
+                {{- $label := .label }}
+                {{- $missing := .missing }}
+                <td>
+                  {{- with where $docs "Params.doc" .doc }}
+                  {{- with index . 0 }}
+                  <a class="text-link" href="{{ .RelPermalink }}" aria-label="{{ $label }} du {{ $date }}">Consulter</a>
+                  {{- end }}
+                  {{- else }}
+                  <span class="meetings-pending">{{ $missing }}</span>
+                  {{- end }}
+                </td>
+                {{- end }}
+              </tr>
+              {{- end }}
+            </tbody>
+          </table>
+        </div>
+      </section>
+{{ end }}

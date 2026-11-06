@@ -1,0 +1,3 @@
+[submodule "gouvernance"]
+	path = gouvernance
+	url = https://github.com/rue-commune/gouvernance.git

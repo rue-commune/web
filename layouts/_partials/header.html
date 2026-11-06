@@ -1,0 +1,23 @@
+{{- $home := cond .IsHome "" "/" -}}
+<header class="site-header">
+      <a class="brand" href="{{ cond .IsHome "#accueil" "/" }}" aria-label="Rue Commune, retour à l'accueil">
+        {{ partial "brand-mark.html" . }}
+        <span>Rue<br />Commune</span>
+      </a>
+
+      <nav aria-label="Navigation principale">
+        <a href="{{ $home }}#mission">Notre cap</a>
+        <a href="{{ $home }}#actions">Nos actions</a>
+        <a href="{{ $home }}#agir">Agir avec nous</a>
+        <a href="{{ $home }}#presse">Presse</a>
+        <a href="/gouvernance/"{{ if eq .Section "gouvernance" }} aria-current="page"{{ end }}>Gouvernance</a>
+      </nav>
+
+      <a
+        class="header-cta"
+        href="https://www.helloasso.com/associations/rue-commune/adhesions/pour-une-metropole-marchable-et-cyclable"
+        target="_blank"
+        rel="noopener"
+        >Adhérer <span aria-hidden="true">↗</span></a
+      >
+    </header>
