@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="fr">
   <head>
-    {{- $title := cond .IsHome .Title (printf "%s — %s" .Title site.Title) }}
-    {{- $description := .Params.description }}
+    {{- $is404 := eq .Kind "404" }}
+    {{- $pageTitle := cond $is404 "Page introuvable" .Title }}
+    {{- $title := cond .IsHome .Title (printf "%s — %s" $pageTitle site.Title) }}
+    {{- $description := cond $is404 "Cette page n’existe pas sur le site de Rue Commune." .Params.description }}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{{ $description }}" />
